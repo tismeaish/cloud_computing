@@ -1,0 +1,53 @@
+#virtual instances management
+manage- clone- full clone- power on
+
+sudo apt update
+sudo apt install apache2 -y
+sudo systemctl enable apache2
+sudo systemctl status apache2
+
+sudo nano /var/www/html/index.html
+After customizing html template -> Ctrl O + Enter + Ctrl X
+
+ifconfig
+
+
+#Basic Load Balancing
+sudo apt install haproxy -y
+sudo nano /etc/haproxy/haproxy.cfg :
+frontend http_front
+bind *:80
+default_backend http_back
+backend http_back
+balance roundrobin
+server vm1 <VM1_IP>:80 check
+server vm2 <VM2_IP>:80 check
+server vm3 <VM3_IP>:80 check
+
+sudo systemctl restart haproxy
+sudo systemctl enable haproxy
+sudo systemctl status haproxy
+
+4. Test the Load Balancer: http://<load_balancer_IP>
+
+OUTPUT:
+http://192.168.119.128
+
+#Task Scheduling
+Open VMware Workstation Pro 17:
+○ Power on the VMs (e.g., UbuntuSelcia).
+2. Configure Task Scheduling on Ubuntu VMs:
+○ We will use cron to schedule tasks, which is the Linux utility for task scheduling.
+3. Create a Task in Ubuntu VM:
+  Create a script file using: nano script.sh
+  echo “Hello Selcia”
+  crontab -e
+  */1 * * * * ./script.sh >>
+  ./output.log
+  
+Verify the Task:
+○ Check if the task is running by checking the output of the script or inspecting
+logs, if any: tail -f /var/log/syslog | grep CRON
+
+output: 
+cat output.log
