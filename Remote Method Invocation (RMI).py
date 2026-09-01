@@ -10,3 +10,18 @@ print(f"Sum of {a} and {b} (invoked remotely): {sum_result}")
 print(f"Multiplication of {a} and {b} (invoked remotely): {mul_result}")
 if name == " main ":
 call_remote_service()
+
+import Pyro4
+@Pyro4.expose
+class Calculator:
+  def add_numbers(self, a, b):
+return a+b
+def multiply(self, a, b):
+return a*b
+def start_server():
+daemon = Pyro4.Daemon()
+uri = daemon.register(Calculator)
+print(f"Server is ready. URI: {uri}")
+daemon.requestLoop()
+if name == " main ":
+start_server()
