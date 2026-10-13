@@ -15,6 +15,7 @@ ifconfig
 #Basic Load Balancing
 sudo apt install haproxy -y
 sudo nano /etc/haproxy/haproxy.cfg :
+
 frontend http_front
 bind *:80
 default_backend http_back
@@ -51,3 +52,48 @@ logs, if any: tail -f /var/log/syslog | grep CRON
 
 output: 
 cat output.log
+
+
+Part 2: Server Consolidation
+Task 1: Implement Server Consolidation Strategy
+1. Open VMware Workstation and Identify VMs:
+ Launch VMware Workstation and review all VMs by opening each VM’s
+configuration to check its resource allocations.
+ List VMs with low usage or redundant workloads that could be consolidated.
+2. Select a Consolidation Host:
+○ Choose a host VM with sufficient CPU, memory, and storage to accommodate the
+combined workloads.
+3. Adjust Resources for Each VM:
+○ Open each VM setting by selecting the VM in VMware Workstation, clicking Edit
+virtual machine settings, and adjusting Memory and Processor values to optimize
+the combined workload.
+○ Avoid over-provisioning to ensure balanced performance.
+4. Migrate Services to a Consolidated VM:
+○ For each VM to be consolidated, copy files and services to the target consolidated
+VM.
+○ Start the services on the consolidated VM and confirm they are running as
+expected.
+5. Power Off and Decommission Unused VMs:
+○ After successfully migrating services, power off the original VMs to ensure the
+services are fully operational on the consolidated VM.
+○ Delete unused VMs by right-clicking the VM in VMware Workstation and
+selecting Remove.
+6. Validate Resource Utilization on the Consolidated VM:
+○ Check the resource usage (CPU, Memory) by accessing the Performance Monitor
+(for Windows) or using tools like top or htop (for Linux).
+○ Verify that the consolidated VM can handle the load without performance
+degradation.
+
+Part 3: Fault Tolerance
+Task 1: Implement Fault-Tolerant Design
+1. Create Redundant VM Copies for High Availability:
+○ For critical services, create a clone of the primary VM by selecting the VM in
+VMware Workstation, going to VM > Manage > Clone, and choosing Full Clone
+to make a complete backup.
+2. Set Up Data Synchronization:
+For Linux, use rsync to sync files between primary and backup VMs by running a
+command like: rsync -av /source_directory/ user@backup_vm_ip:/destination_directory
+3. Enable Snapshots for Quick Recovery:
+○ In VMware Workstation, select a critical VM, go to VM > Snapshot > Take
+Snapshot, and give it a name (e.g., “Pre-Consolidation Snapshot”).
+○ Take snapshots before major updates or configurations to quickly revert if needed.
